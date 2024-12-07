@@ -21,7 +21,7 @@ app.use("/api/tabs", tabsRoutes);
 const columnsRoutes = require("./routes/columns");
 app.use("/api/tabs", columnsRoutes);
 const cardsRoutes = require("./routes/cards");
-app.use("/", cardsRoutes);
+app.use("/api/tabs/:tabId/columns", cardsRoutes);
 
 // middleware requests
 app.use((req, res, next) => {
