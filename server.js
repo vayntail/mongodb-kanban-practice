@@ -8,6 +8,9 @@ const PORT = process.env.PORT || 5050;
 
 const db = require("./db/conn");
 
+const cors = require("cors");
+app.use(cors());
+
 // middleware to parse form data and json
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
