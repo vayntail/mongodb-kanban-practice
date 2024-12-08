@@ -8,14 +8,14 @@ async function fetchAllTabs() {
     }
     // get array of all tab objects
     const tabs = await response.json();
-    createTabs(tabs);
+    displayTabs(tabs);
     console.log(tabs);
   } catch (error) {
     console.error(error.message);
   }
 }
 
-function createTabs(tabs) {
+function displayTabs(tabs) {
   const aside = document.querySelector("aside");
 
   // clear all elements inside aside
@@ -33,6 +33,7 @@ function createTabs(tabs) {
     // if first index, set it as active
     if (index === 0) {
       tabEl.classList.add("tab-active");
+      getColumnsFromTab(tab);
     }
 
     // on tab click, set it to active
@@ -74,8 +75,62 @@ async function postNewTab() {
   }
 }
 
-function setup() {
-  fetchAllTabs();
+// display all columns from tab
+async function getColumnsFromTab(tab) {
+  const url = `http://localhost:5052/api/tabs/${tab._id}/columns`;
+  console.log(url);
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    const columns = await response.json();
+    // for each column, create and display column
+    displayColumns(tab._id, columns);
+  } catch (error) {
+    console.error(error.message);
+  }
 }
 
-setup();
+function displayColumns(tabId, columns) {
+  console.log(columns);
+  const main = document.querySelector("main");
+
+  // clear all elements inside main
+  main.innerHTML = "";
+
+  // for each column, create and add column
+  columns.forEach((column, index) => {
+    // create element and add
+    const columnEl = document.createElement("div");
+    columnEl.classList.add("column");
+    columnEl.innerText = column.name;
+    main.append(columnEl);
+
+    // for each column, add cards
+    const url = `http://localhost:5052/api/tabs/${tabId}/columns/${column._id}/cards`;
+    console.log(url);
+    getCardsFromColumn(url);
+  });
+
+  // create add new column button
+}
+
+async function getCardsFromColumn(url) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    const cards = await response.json();
+    console.log(cards);
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+// main setup
+function main() {
+  fetchAllTabs();
+}
+main();

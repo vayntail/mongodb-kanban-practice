@@ -4,11 +4,12 @@ const Card = require("../models/card");
 
 // /api/tabs/:tabId/columns/:columnId/cards
 router
-  .route(":columnId/cards")
+  .route("/:columnId/cards")
   // get all cards for a specific column
   .get(async (req, res, next) => {
     try {
-      const cards = await Cards.find({ columnId: req.params.columnId });
+      console.log("hi");
+      const cards = await Card.find({ columnId: req.params.columnId });
       res.status(200).json(cards);
     } catch (err) {
       res.status(400).send(err);
@@ -27,7 +28,7 @@ router
   });
 
 router
-  .route(":columnId/cards/:cardId")
+  .route("/:columnId/cards/:cardId")
   // edit a specific note
   .patch(async (req, res, next) => {
     try {

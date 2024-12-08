@@ -39,3 +39,14 @@ aside {
     border: none;
   }
 }
+
+main {
+  padding: 8px;
+}
+
+.column {
+  height: 300px;
+  width: 200px;
+  border: 1px solid rgb(212, 212, 212);
+  border-radius: 8px;
+}
