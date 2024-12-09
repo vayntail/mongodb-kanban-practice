@@ -1,3 +1,6 @@
+/*
+tabs
+*/
 // display all tabs
 async function fetchAllTabs() {
   const url = "http://localhost:5052/api/tabs";
@@ -17,18 +20,17 @@ async function fetchAllTabs() {
 
 function displayTabs(tabs) {
   const aside = document.querySelector("aside");
-
+  const tabEl = document.querySelector("#tab");
   // clear all elements inside aside
   aside.innerHTML = "";
 
   // for each tab, create and add tab
   tabs.forEach((tab, index) => {
-    console.log(index);
+    const name = tab.name;
     // create tab element and add
-    const tabEl = document.createElement("div");
-    tabEl.classList.add("tab");
-    tabEl.innerText = tab.name;
-    aside.append(tabEl);
+    const clone = tabEl.cloneNode(true);
+    clone.querySelector("p").innerHTML = name;
+    aside.append(clone);
 
     // if first index, set it as active
     if (index === 0) {
@@ -83,6 +85,9 @@ async function postNewTab() {
   }
 }
 
+/*
+columns
+*/
 // display all columns from tab
 async function getColumnsFromTab(tab) {
   const url = `http://localhost:5052/api/tabs/${tab._id}/columns`;
@@ -126,12 +131,15 @@ function displayColumns(tabId, columns) {
   addNew.classList.add("column");
   addNew.style.height = "fit-content";
   addNew.innerHTML = `
-  <input></input>
-  <button>create</button>
-  `;
+      <input></input>
+      <button>create</button>
+      `;
   columnsEl.append(addNew);
 }
 
+/*
+cards
+*/
 async function getCardsFromColumn(columnEl, url) {
   try {
     const response = await fetch(url);
@@ -139,22 +147,21 @@ async function getCardsFromColumn(columnEl, url) {
       throw new Error(`Response status: ${response.status}`);
     }
     const cards = await response.json();
-    console.log("hey" + cards);
-    // display the cards
-    const cardEl = document.createElement("div");
-    cardEl.innerHTML = `
-    <h3>${cards.title}</h3>
-    <p>${cards.content}</p>
-      `;
-    cardEl.classList.add("card");
-    columnEl.append(cardEl);
+    displayCards(columnEl, cards);
   } catch (error) {
     console.error(error.message);
   }
 }
 
-// main setup
-function main() {
-  fetchAllTabs();
+function displayCards(columnEl, cards) {
+  // display the cards
+  const cardEl = document.createElement("div");
+  cardEl.innerHTML = `
+  <h3>${cards.title}</h3>
+  <p>${cards.content}</p>
+    `;
+  cardEl.classList.add("card");
+  columnEl.append(cardEl);
 }
-main();
+
+fetchAllTabs();
