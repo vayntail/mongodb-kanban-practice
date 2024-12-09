@@ -5,6 +5,8 @@ The front-end is not fully complete, however all API functions work via Postman.
 
 # API functions:
 
-## **get:** /api/tabs/
+## get:
+
+**/api/tabs/**
 
 - get all tabs
